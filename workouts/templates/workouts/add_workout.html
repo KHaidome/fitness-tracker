@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Workout{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold mb-6">Add New Workout</h1>
+    <form method="post" class="bg-white p-6 rounded-lg shadow-md">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="{{ form.date.id_for_label }}" class="block text-gray-700 font-bold mb-2">Date</label>
+            {{ form.date }}
+        </div>
+        <div class="mb-4">
+            <label for="{{ form.notes.id_for_label }}" class="block text-gray-700 font-bold mb-2">Notes</label>
+            {{ form.notes }}
+        </div>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Workout</button>
+    </form>
+{% endblock %}

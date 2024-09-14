@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}My Workouts{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold mb-6">My Workouts</h1>
+    {% if workouts %}
+        <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {% for workout in workouts %}
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-2">{{ workout.date|date:"F j, Y" }}</h2>
+                    <p class="text-gray-600 mb-4">{{ workout.notes|truncatewords:20 }}</p>
+                    <a href="{% url 'workout_detail' workout.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">View Details</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-xl text-gray-600">You haven't logged any workouts yet. <a href="{% url 'add_workout' %}" class="text-blue-500 hover:underline">Add your first workout!</a></p>
+    {% endif %}
+{% endblock %}

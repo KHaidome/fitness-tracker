@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Workout Details{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold mb-6">Workout on {{ workout.date|date:"F j, Y" }}</h1>
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 class="text-xl font-semibold mb-2">Notes</h2>
+        <p class="text-gray-600">{{ workout.notes }}</p>
+    </div>
+
+    <h2 class="text-2xl font-bold mb-4">Exercises</h2>
+    {% if exercises %}
+        <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-8">
+            {% for exercise in exercises %}
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-2">{{ exercise.exercise.name }}</h3>
+                    <p class="text-gray-600">{{ exercise.sets }} sets x {{ exercise.reps }} reps</p>
+                    {% if exercise.weight %}
+                        <p class="text-gray-600">Weight: {{ exercise.weight }} kg</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-xl text-gray-600 mb-8">No exercises added to this workout yet.</p>
+    {% endif %}
+
+    <h2 class="text-2xl font-bold mb-4">Add Exercise</h2>
+    <form method="post" class="bg-white p-6 rounded-lg shadow-md">
+        {% csrf_token %}
+        <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+            <div>
+                <label for="{{ form.exercise.id_for_label }}" class="block text-gray-700 font-bold mb-2">Exercise</label>
+                {{ form.exercise }}
+            </div>
+            <div>
+                <label for="{{ form.sets.id_for_label }}" class="block text-gray-700 font-bold mb-2">Sets</label>
+                {{ form.sets }}
+            </div>
+            <div>
+                <label for="{{ form.reps.id_for_label }}" class="block text-gray-700 font-bold mb-2">Reps</label>
+                {{ form.reps }}
+            </div>
+            <div>
+                <label for="{{ form.weight.id_for_label }}" class="block text-gray-700 font-bold mb-2">Weight (kg)</label>
+                {{ form.weight }}
+            </div>
+        </div>
+        <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Exercise</button>
+    </form>
+{% endblock %}
