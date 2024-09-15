@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to Fitness Tracker{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-8 text-center">Welcome to Fitness Tracker</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4">Track Your Progress</h2>
+            <p class="mb-4">Log your workouts, set goals, and monitor your fitness journey all in one place.</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'add_workout' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Log a Workout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Get Started</a>
+            {% endif %}
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4">Your Recent Workouts</h2>
+            {% if user.is_authenticated %}
+                {% if recent_workouts %}
+                    <ul class="list-disc list-inside">
+                        {% for workout in recent_workouts %}
+                            <li class="mb-2">
+                                <a href="{% url 'workout_detail' workout.id %}" class="text-blue-500 hover:underline">
+                                    {{ workout.date|date:"F j, Y" }} - {{ workout.notes|truncatechars:30 }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>You haven't logged any workouts yet. Start tracking your fitness journey today!</p>
+                {% endif %}
+            {% else %}
+                <p>Log in to see your recent workouts and start tracking your progress.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="mt-12 text-center">
+        <h2 class="text-2xl font-semibold mb-4">Why Use Fitness Tracker?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Easy Logging</h3>
+                <p>Quickly log your workouts with our user-friendly interface.</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Progress Tracking</h3>
+                <p>Visualize your fitness journey with detailed progress reports.</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Goal Setting</h3>
+                <p>Set and achieve your fitness goals with our goal-tracking features.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

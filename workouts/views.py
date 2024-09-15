@@ -1,11 +1,19 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Workout, Exercise, WorkoutExercise
+from django.contrib import messages
 from .forms import WorkoutForm
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
+
+def home(request):
+    if request.user.is_authenticated:
+        recent_workouts = Workout.objects.filter(user=request.user).order_by('-date')[:5]
+    else:
+        recent_workouts = []
+    return render(request, 'home.html', {'recent_workouts': recent_workouts})
 
 class WorkoutForm(forms.ModelForm):
     class Meta:
@@ -64,7 +72,10 @@ def add_workout(request):
             workout = form.save(commit=False)
             workout.user = request.user
             workout.save()
+            messages.success(request, 'Workout added successfully!')
             return redirect('workout_detail', workout_id=workout.id)
+        else:
+            messages.error(request, 'There was an error with your submission. Please check the form.')
     else:
         form = WorkoutForm()
     return render(request, 'workouts/add_workout.html', {'form': form})

@@ -5,6 +5,13 @@
 {% block content %}
 <div class="max-w-md mx-auto">
     <h1 class="text-3xl font-bold mb-6">Add New Workout</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="{% if message.tags %}{{ message.tags }}{% endif %} bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 mb-4" role="alert">
+                <p class="font-bold">{{ message }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
     <form method="post" class="bg-white p-6 rounded-lg shadow-md">
         {% csrf_token %}
         {% for field in form %}
